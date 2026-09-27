@@ -1,6 +1,8 @@
-# Personal Neovim configuration
+# Personal Neovim and Kitty configuration
 
 My LazyVim configuration for editing code, Markdown, LaTeX, PDFs, and Jupyter notebooks. It includes the current plugin specifications, keymaps, editor options, colorschemes, and `lazy-lock.json` so other computers can restore the same plugin revisions.
+
+This private repository also contains the Kitty terminal configuration in [`kitty/kitty.conf`](kitty/kitty.conf). See [`README-kitty.md`](README-kitty.md) for its shortcuts, installation, and update workflow. Neovim stays at the repository root so it can be cloned directly into `~/.config/nvim`.
 
 ## Install on another computer
 
@@ -16,6 +18,8 @@ git clone git@github.com:mruniverse8/nvim-config.git "${XDG_CONFIG_HOME:-$HOME/.
 mkdir -p "$HOME/vaults/personal"
 nvim
 ```
+
+To install the included Kitty configuration too, follow [the Kitty setup instructions](README-kitty.md#installation). The Kitty installer refuses to overwrite an existing config.
 
 The personal vault directory is used by the Obsidian plugin; its notes are not part of this repository. Change its path in `lua/plugins/obsidian.lua` if needed.
 
@@ -87,8 +91,8 @@ Install a C compiler through the Xcode Command Line Tools if one is not already 
 macOS packages for the optional workflows:
 
 ```sh
-brew install kitty imagemagick librsvg node ghostscript poppler jupyterlab jupytext
-brew install --cask skim
+brew install imagemagick librsvg node ghostscript poppler jupyterlab jupytext
+brew install --cask kitty skim
 ```
 
 Use `:checkhealth provider` to verify Neovim's Python environment and `:Mason` to install language tools for the languages you use.
@@ -102,5 +106,8 @@ Use `:checkhealth provider` to verify Neovim's Python environment and `:Mason` t
 - `lazy-lock.json`: the saved plugin revisions.
 - `lazyvim.json`: enabled LazyVim extras and configuration metadata.
 - `install-macos.sh`: optional symlink installer for a checkout stored elsewhere; it also uses portable shell commands on Linux and refuses to overwrite an existing config.
+- `kitty/kitty.conf`: a complete copy of the Kitty configuration saved from this Mac, including commented option documentation.
+- `README-kitty.md`: Kitty setup, shortcuts, and instructions for saving future changes.
+- `install-kitty.sh`: links the saved Kitty config into the standard config directory without overwriting an existing file.
 
 Based on [LazyVim's starter configuration](https://github.com/LazyVim/starter); its existing Git history and license are retained.
