@@ -125,7 +125,7 @@ inline images. `:echo executable('mmdc')` should return `1`; if it returns `0`,
 ensure your npm prefix's `bin` directory is on Neovim's PATH. Invalid diagrams
 show a conversion error in `:messages`; correct the source to render again.
 
-Diagrams preserve their aspect ratio and fit within 120 columns by 40 rows and
+Diagrams preserve their aspect ratio and fit within 160 columns by 40 rows and
 the available text area, excluding line-number/sign columns. Mermaid renders at
 twice the terminal's normal pixel density for sharper text and lines without
 increasing the displayed size. Long `flowchart LR` diagrams can have small labels

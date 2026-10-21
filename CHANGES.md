@@ -1,5 +1,22 @@
 # Changes
 
+## NVIM-1 — Wider previews (2026-10-21)
+
+Raised the document preview limit from 120 to 160 columns in both the Snacks
+option and its gutter-aware sizing callback. Updated README sizing guidance.
+The 40-row limit and 2x rendering density remain unchanged. Wider previews still
+fit the available text area; the proportional increase is up to one third.
+
+StyLua, Lua syntax, and `git diff --check` passed. Applied the width option and
+callback to the identified running Markdown session, preserving source text and
+its modified flag. That session had no visible diagrams at verification time,
+so wider placements were not visually retested. Earlier narrow-window tests
+remain relevant to the unchanged clamping logic.
+
+Commit message: `fix(nvim): widen inline diagram previews (NVIM-1)`.
+The user authorized this focused local commit; push remains a manual user action.
+Git records the final commit hash.
+
 ## NVIM-1 — Inline Mermaid (implemented and verified, 2026-10-21)
 
 Snacks renders the existing Mermaid fences with visible source, up to 120 columns

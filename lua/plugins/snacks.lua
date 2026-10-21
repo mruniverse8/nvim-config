@@ -7,12 +7,12 @@ return {
         doc = {
           enabled = true,
           inline = true,
-          max_width = 120,
+          max_width = 160,
           max_height = 40,
           auto_resize = true,
           on_update_pre = function(placement)
             -- Reserve the number/sign columns and the image's indentation.
-            local width = 120
+            local width = 160
             for _, win in ipairs(placement:wins()) do
               local info = vim.fn.getwininfo(win)[1]
               width = math.min(width, info.width - info.textoff - placement.opts.pos[2])

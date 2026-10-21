@@ -41,3 +41,11 @@ and 110-column terminal widths. With wrapped source in a 70-column split, the
 installed Snacks version places charts near the opening fence instead. Source
 remains visible and editable. Fixing that upstream layout behavior is outside
 this configuration-only change; widen the split to retain below-source placement.
+
+Width refinement (2026-10-21, implemented): raise the preview cap from 120 to
+160 columns at the user's request. Acceptance: use the extra width when available,
+retain the 40-row cap and 2x pixel density, and continue fitting within the text
+area on narrower windows. Lua syntax, StyLua, and diff checks passed; the live
+session's width setting was updated without changing source or modified state.
+No diagrams were in its visible viewport during this follow-up, so actual wider
+placements were not visually retested. The existing width-clamping logic is unchanged.
