@@ -88,7 +88,7 @@ local image_zoom_profiles = {
 }
 
 local function reload_image_nvim()
-  -- Clear and reload current buffer to force image.nvim to redraw markdown images
+  -- Reload after changing image.nvim output sizing (Markdown uses Snacks).
   vim.cmd("edit")
 end
 
@@ -101,7 +101,7 @@ local function set_image_zoom(level)
     backend = "kitty",
     integrations = {
       markdown = {
-        enabled = true,
+        enabled = false, -- Snacks owns Markdown images, including Mermaid.
       },
     },
     max_width = profile.max_width,

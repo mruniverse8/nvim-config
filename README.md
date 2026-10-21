@@ -82,6 +82,7 @@ Install a C compiler through the Xcode Command Line Tools if one is not already 
 | Feature | Local requirements |
 | --- | --- |
 | Markdown | Markview and Tree-sitter parsers, installed by Lazy. The duplicate `render-markdown.nvim` renderer is disabled to prevent icons covering heading text. |
+| Mermaid in Markdown | Snacks, Kitty, the Markdown Tree-sitter parser, ImageMagick, and `mmdc` from `@mermaid-js/mermaid-cli` (including its Puppeteer browser). See below. |
 | Images and math | Kitty, ImageMagick, Node.js/npm, and `rsvg-convert` from librsvg. Run `:MdMath build` if the math renderer needs rebuilding. |
 | PDF preview | ImageMagick, Ghostscript, and Poppler utilities; a terminal supporting image display. |
 | Jupyter notebooks | Python 3.10+, Jupytext, Jupyter, and a Neovim Python provider with `pynvim` and `jupyter_client`. Run `:UpdateRemotePlugins` after setting up the provider. |
@@ -96,6 +97,74 @@ brew install --cask kitty skim
 ```
 
 Use `:checkhealth provider` to verify Neovim's Python environment and `:Mason` to install language tools for the languages you use.
+
+## Mermaid diagrams inside Markdown
+
+Snacks renders each fenced `mermaid` block below its visible source in Kitty.
+Open a Markdown file normally; previews refresh as the buffer changes. The
+Markdown stays plain text, and generated images live under Neovim's cache at
+`snacks/image`. No separate Mermaid Neovim plugin is required.
+When code wraps in a narrow split, Snacks may place the preview near the opening
+fence instead of below the whole block; widen the split for the normal layout.
+
+Install the renderer using a Node.js/npm installation owned by your user:
+
+```sh
+npm install -g @mermaid-js/mermaid-cli
+mmdc --version
+```
+
+The CLI uses a local Puppeteer browser to render diagrams. Allow its browser
+installation to complete. See the [Mermaid CLI documentation](https://github.com/mermaid-js/mermaid-cli)
+and [Puppeteer troubleshooting](https://pptr.dev/troubleshooting) for browser
+installation or launch failures. Use a Node version supported by the CLI.
+
+Restart Neovim inside Kitty and run `:checkhealth snacks`. Check that `mmdc` and
+ImageMagick are found, the Markdown parser is installed, and the terminal supports
+inline images. `:echo executable('mmdc')` should return `1`; if it returns `0`,
+ensure your npm prefix's `bin` directory is on Neovim's PATH. Invalid diagrams
+show a conversion error in `:messages`; correct the source to render again.
+
+Diagrams preserve their aspect ratio and fit within 120 columns by 40 rows and
+the available text area, excluding line-number/sign columns. Mermaid renders at
+twice the terminal's normal pixel density for sharper text and lines without
+increasing the displayed size. Long `flowchart LR` diagrams can have small labels
+in a narrow window; widen Kitty or maximize the editor split. The existing
+`<leader>i+`, `<leader>i-`, and `<leader>i0` shortcuts configure image.nvim output,
+not Snacks diagrams. Math keeps its existing concealment behavior.
+
+These two examples are also the rendering smoke-test fixtures:
+
+```mermaid
+flowchart LR
+    DVR["DVR records independently"] --> FIND["camserver find: channel and range"]
+    FIND --> DAV["Download or resume DAV"]
+    DAV --> MKV["Remux and repair MKV"]
+    MKV --> IDX["segments/index.csv"]
+    MKV --> ANALYZE["Detection and tracking CSV"]
+    ANALYZE --> MINE["Crop, embed, cluster and cap"]
+    MINE --> REVIEW["Source folder-based review"]
+```
+
+Proposed smaller system; nodes explicitly marked later are not milestone 3 code:
+
+```mermaid
+flowchart LR
+    CLI["Manual CLI"] --> OPS["Shared acquisition and mining operations"]
+    FE["FE: browser UI - later"] --> API["BE: authenticated API - later"]
+    API --> JOBS[("SQLite jobs and recording registry")]
+    SCHED["Online scheduler - later"] --> JOBS
+    JOBS --> WORKER["Durable worker - later daemon"]
+    WORKER --> OPS
+    OPS --> ADAPTER["Dahua adapter"]
+    ADAPTER --> DVR["Existing DVR recordings"]
+    OPS --> MEDIA["Normalization and validation"]
+    MEDIA --> LOCAL["Immutable local recordings"]
+    LOCAL --> MINE["Offline detection and crop mining"]
+    MINE --> OUT["Published manifests, crops and context"]
+    OPS --> JOBS
+    OUT --> API
+```
 
 ## Configuration layout
 
