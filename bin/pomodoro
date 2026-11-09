@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root=$(cd -- "$(dirname -- "$(readlink -f -- "$0")")/.." && pwd)
+export POMODORO_ROOT="$root"
+check=0
+while (($#)); do
+  case "$1" in
+    --focus|--short-break|--long-break|--cycles)
+      (($# >= 2)) || { echo "Missing value for $1" >&2; exit 2; }
+      [[ $2 =~ ^[0-9]+([.][0-9]+)?$ ]] || { echo "Invalid duration/count: $2" >&2; exit 2; }
+      if [[ $1 == --cycles ]]; then
+        [[ $2 =~ ^[0-9]+$ ]] && ((10#$2 >= 1 && 10#$2 <= 100)) || { echo 'Cycles must be an integer from 1 to 100' >&2; exit 2; }
+      else
+        awk -v value="$2" 'BEGIN { exit !(value > 0 && value <= 1440) }' || { echo 'Minutes must be greater than 0 and at most 1440' >&2; exit 2; }
+      fi
+      case "$1" in
+        --focus) export POMODORO_FOCUS="$2";;
+        --short-break) export POMODORO_SHORT_BREAK="$2";;
+        --long-break) export POMODORO_LONG_BREAK="$2";;
+        --cycles) export POMODORO_CYCLES="$2";;
+      esac
+      shift 2;;
+    --mute) export POMODORO_MUTE=1; shift;;
+    --check) check=1; shift;;
+    --help|-h)
+      echo 'Usage: pomodoro [--focus MIN] [--short-break MIN] [--long-break MIN] [--cycles N] [--mute] [--check]'
+      echo 'Overrides: POMODORO_NVIM, POMODORO_KITTY, POMODORO_PETS_DIR, POMODORO_STATE_FILE'
+      exit 0;;
+    *) echo "Unknown option: $1" >&2; exit 2;;
+  esac
+done
+nvim_bin=${POMODORO_NVIM:-nvim}
+kitty_bin=${POMODORO_KITTY:-kitty}
+# Desktop sessions may have a smaller PATH than interactive shells.
+if ! command -v "$kitty_bin" >/dev/null && [[ -x "$HOME/.local/bin/kitty" ]]; then
+  kitty_bin="$HOME/.local/bin/kitty"
+fi
+for program in "$nvim_bin" "$kitty_bin" flock; do
+  command -v "$program" >/dev/null || { echo "Missing executable: $program" >&2; exit 1; }
+done
+if ! "$nvim_bin" --version >/dev/null 2>&1; then
+  echo 'Neovim cannot run. Set POMODORO_NVIM to a working binary (this machine: /snap/nvim/current/usr/bin/nvim).' >&2
+  exit 1
+fi
+if ((check)); then
+  "$nvim_bin" --headless -u NONE -i NONE -l "$root/scripts/pomodoro-check.lua"
+  exit $?
+fi
+exec "$kitty_bin" --class pomodoro-pets --title 'Pomodoro pets' \
+  -o remember_window_size=no -o initial_window_width=60c -o initial_window_height=18c \
+  "$nvim_bin" -n -i NONE -u "$root/scripts/pomodoro-init.lua"

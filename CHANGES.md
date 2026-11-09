@@ -90,3 +90,53 @@ The user authorized a focused local commit. Push remains a manual user action;
 no release or push performed. Git records the final commit hash.
 
 This record starts with the current task; earlier history is in Git.
+
+
+## NVIM-2 — Pomodoro pets (2026-11-09)
+
+Implemented a local lazy-loaded Pomodoro plugin, Bash/Kitty desktop launcher,
+minimal Neovim bootstrap, desktop-entry installer, shared settings, and tests.
+The countdown and controls accompany the existing PetsADHD sidebar artwork.
+Automatic 25/5/15 phases, four-focus long breaks, optional focus music and phase
+alerts, atomic paused restore and kernel-managed exclusive ownership are included.
+Spec and accepted boundary decision: [NVIM-2](docs/specs/pomodoro-pets.md).
+
+Code: `lua/pomodoro/`, shared config and Lazy spec; launcher under `bin/`, bootstrap,
+checks, installer and test runner under `scripts/`, desktop template and tests.
+README and existing root/constitution records document operation and constraints.
+No PetsADHD source or dependency revisions changed. Five pre-existing user diffs
+remain intact, including the lockfile's unrelated dependency changes.
+
+Verification performed:
+
+- Fake-clock cycle, long-break, pause/resume, reset, late-tick and restore checks passed.
+- Real renderer animation, resize fallback, theme events, hide/reopen and user-buffer
+  preservation passed in Neovim. Exclusive ownership, atomic round-trip, corrupt save
+  preservation and release/reacquisition after owner termination passed.
+- Audio stubs verified focus/break/mute lifecycle, bounded alerts, cancellation,
+  cleanup and suppression of automatic retries after a failed stream.
+- Lazy.nvim command loading and dependency commands passed against installed
+  PetsADHD fb91623 and lockfile-target 42b640d. The latter predates PetTerminal;
+  tests check that command only on revisions which provide it.
+- Launcher tests passed for arbitrary cwd, paths with spaces, invalid arguments,
+  missing executables, desktop-entry validation, repeat installation and refusing
+  unrelated files. Installed application-menu and Desktop entries on this machine.
+- Real Kitty window inspected visually; shortened a clipped control legend.
+  Short real phases advanced through focus/break and long-break cycles. Music
+  streamed successfully; pause held remaining time steady. Alert FFplay exited 0;
+  the original music process was absent after shutdown. A controlled two-launch
+  GUI check confirmed exact paused restore and explicit --mute overriding saves.
+- Lua syntax, targeted StyLua, Bash syntax, Python parsing and git diff checks passed.
+  ShellCheck unavailable and skipped. Tests use the bundled Snap Neovim binary,
+  because its wrapper fails in the automation sandbox. GUI tests required desktop access.
+
+Limits: backend success does not prove a listener heard the audio. A physical click
+on the installed Desktop shortcut was not verified. `gio launch` returned success
+but was insufficient to confirm that instance, so the decisive restart test used
+our Bash launcher directly. Full user configuration, other OSes and plugin upgrades
+were not retested. Linux-only locking/signals; independent state scopes, no daemon.
+Saved settings persist until reset, and crashes can lose up to five seconds.
+
+Commit message: `feat(nvim): add Pomodoro pets and desktop launcher (NVIM-2)`.
+User authorized commit and feature-branch push. Delivery result is recorded in Git
+and the handoff; no merge or release requested.

@@ -49,3 +49,10 @@ area on narrower windows. Lua syntax, StyLua, and diff checks passed; the live
 session's width setting was updated without changing source or modified state.
 No diagrams were in its visible viewport during this follow-up, so actual wider
 placements were not visually retested. The existing width-clamping logic is unchanged.
+
+## NVIM-2 — Pomodoro pets (implemented and verified)
+
+Implement the approved [spec](docs/specs/pomodoro-pets.md), AC-1 through AC-6.
+AC-1 through AC-6 passed automated checks; live Kitty and audio backend verified.
+Human listening and a GUI click on the installed shortcut remain unverified.
+See CHANGES.md. All pre-existing user edits preserved.

@@ -180,3 +180,74 @@ flowchart LR
 - `install-kitty.sh`: links the saved Kitty config into the standard config directory without overwriting an existing file.
 
 Based on [LazyVim's starter configuration](https://github.com/LazyVim/starter); its existing Git history and license are retained.
+
+## Pomodoro pets (NVIM-2)
+
+Run `:Pomodoro` or `<leader>uO` for an animated focus timer inside LazyVim.
+The existing PetsADHD sidebar artwork supplies T-rex, dog, duck and 67 companions.
+Default cycle: 25-minute focus, 5-minute break, 15-minute break after every four
+completed focus sessions. Phases advance automatically. A new session runs;
+a saved session reopens paused. Hidden editor timers keep running.
+
+```sh
+~/.config/nvim/bin/pomodoro --check
+~/.config/nvim/bin/pomodoro
+~/.config/nvim/bin/pomodoro --focus 50 --short-break 10 --long-break 30
+~/.config/nvim/bin/pomodoro --mute
+~/.config/nvim/scripts/install-pomodoro.sh
+```
+
+The installer adds **Pomodoro pets** to the application menu and Desktop. GNOME
+may require right-click → **Allow Launching**. Keep the checkout at its installed
+location; rerun the installer after moving it. It refuses unrelated launchers.
+Remove these two files to uninstall the shortcuts:
+`~/.local/share/applications/pomodoro-pets.desktop` and
+`$(xdg-user-dir DESKTOP)/Pomodoro pets.desktop`. The source stays in this repo.
+The installer requires Python 3 and `xdg-user-dir`; optional `gio` marks it trusted.
+
+| Key | Action |
+| --- | --- |
+| Space | Pause/resume |
+| r | Reset cycle to paused focus |
+| n | Next pet (shares the sidebar selection in the editor) |
+| m | Toggle focus music |
+| a | Toggle boundary alerts |
+| q | Hide editor panel, or save and exit desktop app |
+
+`:Pomodoro start`, `pause`, `resume`, `reset`, and `stop` are also available.
+`stop` saves paused and hides the panel. Edit `lua/config/pomodoro.lua` for shared
+durations, cycle count, music URL/volume and alert settings. Lua callers can use
+`require("pomodoro").setup(opts)` and inspect `require("pomodoro").status()`.
+Saved sessions retain their original durations until reset; launcher flags set the
+next fresh/reset session defaults. Pets keep animating when the timer is paused.
+
+Desktop requires Linux, Kitty, Neovim 0.11+, `flock`, and an installed PetsADHD
+plugin (`:Lazy restore` on a new machine). The minimal desktop bootstrap loads
+only the timer and pet modules. Music uses the existing PetsADHD soundtrack,
+`ffplay`, `yt-dlp`, and its supported JavaScript runtime; phase alerts use an
+FFplay-generated tone. Missing audio dependencies leave the timer usable.
+No audio is downloaded or bundled by this feature.
+
+The launcher accepts executable paths through `POMODORO_NVIM` and
+`POMODORO_KITTY`; override plugin location with `POMODORO_PETS_DIR`. On this
+machine the Snap wrapper cannot run inside automation; isolated tests use:
+
+```sh
+POMODORO_NVIM=/snap/nvim/current/usr/bin/nvim \
+VIMRUNTIME=/snap/nvim/current/usr/share/nvim/runtime \
+  ~/.config/nvim/bin/pomodoro --check
+```
+
+State lives in Neovim's state directory under `pomodoro/`: desktop is separate
+from editor sessions keyed by working directory. A second owner of the same
+state file is rejected; use `POMODORO_STATE_FILE` for an additional desktop timer
+or `state_file` in Lua options for another editor timer. Kernel locks release on
+process exit. Saves are atomic, every five seconds and on controls/transitions.
+A crash can lose up to five seconds; closed time and Linux suspend time are not
+counted. Corrupt saves are preserved with an `.invalid-*` suffix and recover paused.
+Unreadable saves remain untouched. There is no background service or synchronization.
+Music continues while a running editor panel is hidden; closing Neovim stops it.
+
+Run `scripts/test-pomodoro.sh` with a working `POMODORO_NVIM`. Tests use fake clocks
+and audio stubs; they do not stream music. See [the feature spec](docs/specs/pomodoro-pets.md)
+and CHANGES.md for acceptance results and live-test limitations.

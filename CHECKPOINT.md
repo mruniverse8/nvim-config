@@ -1,46 +1,29 @@
 # Checkpoint
 
-Objective: NVIM-1 follow-up, widen inline diagrams to use more available space.
+Objective: NVIM-2 — ship the approved Pomodoro pets plan in nvim-config.
+Latest existing commit before this feature: 5859d88907f38970316d6821a27721084b791c93.
 
-Latest existing commit when preparing this follow-up's commit:
-`4b75d81b52b274476b35d79b256a701206974e42`, the initial NVIM-1 implementation.
-The user authorized committing the width follow-up; unrelated edits remain
-uncommitted. Git records this document's resulting commit hash.
+Completed: shared local Lazy plugin, real pet rendering, countdown, controls,
+optional music/alerts, atomic paused persistence, flock ownership, Bash/Kitty
+launcher, minimal bootstrap, safe desktop installer, tests and documentation.
+Installed desktop entries outside Git. AC-1 through AC-6 verified within the
+bounds recorded in CHANGES.md; controlled real GUI restart and audio backend
+checks passed. Explicit --mute overrides saved audio preferences.
 
-Completed: configured Snacks inline diagrams, 2x pixel density, visible source,
-conversion-error notifications, and fitting to the usable text area on resize.
-Corrected the legacy zoom callback; installed Mermaid CLI and its browser;
-added README examples and setup documentation. Actual CLI, configuration, and
-Kitty visual/interaction checks passed within the bounds recorded in CHANGES.md.
-Also cleared duplicate Snacks placements in the user's older running Markdown
-session without changing its source or modified flag; it still needs a restart
-to load the final renderer settings.
+Decision: reuse existing PetsADHD render/audio APIs without modifying that repo;
+independent desktop/editor state scopes and no service. See docs/specs/pomodoro-pets.md.
+No migration or plugin upgrades. Linux target; saved sessions reopen paused.
 
-Width follow-up completed: increased both width limits from 120 to 160, updated
-README, and applied width settings in the identified live Markdown session.
-StyLua, Lua syntax, and diff checks passed. No diagrams were visible there at
-verification time; a fresh visual check of the larger size remains outstanding.
-Source text and modified state were preserved during the live settings update.
+Pre-existing uncommitted changes preserved and excluded from the feature commit:
+README-kitty.md, kitty/kitty.conf, lazy-lock.json, lua/config/keymaps.lua,
+lua/plugins/colorscheme.lua. Feature files and root records are the only staged changes.
 
-No remaining implementation work for the agreed configuration approach.
-Known limitation: wrapped source in narrow splits moves the preview near the
-opening fence; below-source placement is verified at 160/110 terminal columns.
-Live notebook execution and other OS/terminal combinations remain untested.
+Remaining: final focused commit and authorized push on feat/pomodoro-pets.
+Git records the resulting hash; this document does not chase its own commit.
+No implementation blockers. Human listening/manual shortcut click and other OSes
+remain unverified; ShellCheck was unavailable. Earlier NVIM-1 evidence/limits
+remain in CHANGES.md and BACKLOG.md.
 
-Pre-existing uncommitted changes to preserve: `README-kitty.md`,
-`kitty/kitty.conf`, `lazy-lock.json`, `lua/config/keymaps.lua` (visual-mode keys),
-and `lua/plugins/colorscheme.lua`.
-Current task changes: `lua/plugins/snacks.lua`, README width guidance, and the
-three root tracking records. Initial NVIM-1 changes are in commit `4b75d81`.
-Generated images and test artifacts are outside Git.
-
-Environment: `~/.config/nvim` links to this repository. The `nvim` Snap wrapper
-fails in the automation environment; the bundled binary runs directly at
-`/snap/nvim/current/usr/bin/nvim` (0.13.0 development build). Use the matching
-`VIMRUNTIME` for isolated checks. Do not change the user's Neovim installation.
-
-Next: restart the user's existing Neovim session to load the configuration and
-open a Mermaid block to see the wider preview. The identified session already
-has the width override; restart loads all saved settings. Push when ready with
-`git -C /home/biorn/Documents/nvim-config push origin main`.
-Commit message: `fix(nvim): widen inline diagram previews (NVIM-1)`.
+Run: bin/pomodoro, :Pomodoro or <leader>uO. Settings: lua/config/pomodoro.lua.
+Tests: POMODORO_NVIM=/snap/nvim/current/usr/bin/nvim with matching VIMRUNTIME,
+then scripts/test-pomodoro.sh. ~/.config/nvim links to this repository.
