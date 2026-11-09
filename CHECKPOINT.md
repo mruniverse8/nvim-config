@@ -1,7 +1,8 @@
 # Checkpoint
 
 Objective: NVIM-2 — ship the approved Pomodoro pets plan in nvim-config.
-Latest existing commit before this feature: 5859d88907f38970316d6821a27721084b791c93.
+Latest existing implementation commit: e2cf55c (NVIM-2).
+Feature base: 5859d88907f38970316d6821a27721084b791c93.
 
 Completed: shared local Lazy plugin, real pet rendering, countdown, controls,
 optional music/alerts, atomic paused persistence, flock ownership, Bash/Kitty
@@ -16,10 +17,11 @@ No migration or plugin upgrades. Linux target; saved sessions reopen paused.
 
 Pre-existing uncommitted changes preserved and excluded from the feature commit:
 README-kitty.md, kitty/kitty.conf, lazy-lock.json, lua/config/keymaps.lua,
-lua/plugins/colorscheme.lua. Feature files and root records are the only staged changes.
+lua/plugins/colorscheme.lua. Feature files and records are committed; only these five unrelated diffs remain.
 
-Remaining: final focused commit and authorized push on feat/pomodoro-pets.
-Git records the resulting hash; this document does not chase its own commit.
+Delivery: implementation e2cf55c committed and pushed to origin/feat/pomodoro-pets.
+No merge or release performed. This delivery-record commit is recorded by Git;
+this document does not chase its own commit. No remaining implementation work.
 No implementation blockers. Human listening/manual shortcut click and other OSes
 remain unverified; ShellCheck was unavailable. Earlier NVIM-1 evidence/limits
 remain in CHANGES.md and BACKLOG.md.
