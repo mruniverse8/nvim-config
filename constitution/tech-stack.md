@@ -12,3 +12,8 @@
 
 Keep optional executables and generated caches outside Git. Reuse the installed
 Snacks implementation; NVIM-1 does not require a new plugin or plugin updates.
+
+NVIM-2 reuses PetsADHD Lua rendering/audio in a local Lazy plugin and minimal desktop bootstrap.
+Linux Bash/Kitty launch the app; flock supplies crash-safe exclusive state ownership. FFplay
+provides music and synthesized alerts; yt-dlp and Node support optional streaming. Python 3
+is used only for desktop-entry installation and launcher tests. No plugin upgrades required.
