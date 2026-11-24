@@ -4,7 +4,7 @@ The complete configuration is saved in [`kitty/kitty.conf`](kitty/kitty.conf). I
 
 ## Current settings
 
-Only the shortcut mappings near the top of the file are active custom settings. The remaining lines are commented option documentation and examples. Font, font size, colors, opacity, shell, and window layout are not explicitly overridden; their defaults can vary between Kitty releases. No additional theme files, font files, or included configuration files are needed by this snapshot.
+The configuration sets a default font size of 17 pt and customizes the shortcuts below. It uses Kitty's defaults for the font family, colors, opacity, shell, and window layout. No additional theme files, font files, or included configuration files are needed by this snapshot.
 
 | Shortcut | Action |
 | --- | --- |
